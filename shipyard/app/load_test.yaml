@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: load-test
-  namespace: default
+  namespace: app
 data:
   load_test.js: |
     import http from 'k6/http';
@@ -23,7 +23,7 @@ data:
     export default function () {
       // our HTTP request, note that we are saving the response to res, which can be accessed later
     
-      const res = http.get('http://web-service.default.svc:9090');
+      const res = http.get('http://web-service.istio-system.svc:9090');
     
       sleep(1);
     
@@ -38,6 +38,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: loadtest-deployment
+  namespace: app
   labels:
     app: web
 spec:

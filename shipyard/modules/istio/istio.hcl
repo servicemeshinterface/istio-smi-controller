@@ -20,7 +20,11 @@ k8s_config "istio" {
   paths = [
     "./istio_config.yaml",
   ]
-
+  
+  health_check {
+    timeout = "120s"
+    pods = ["istio.io/rev=default"]
+  }
   wait_until_ready = true
 }
 

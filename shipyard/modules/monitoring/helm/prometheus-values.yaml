@@ -1,6 +1,0 @@
----
-alertmanager:
-  enabled: false
-
-grafana:
-  enabled: false

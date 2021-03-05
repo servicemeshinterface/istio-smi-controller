@@ -3,6 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: web-service
+  namespace: app
   labels:
     app: metrics
 spec:
@@ -24,6 +25,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: web-deployment
+  namespace: app
   labels:
     app: web
 spec:
@@ -37,8 +39,7 @@ spec:
         app: web
         metrics: enabled
       annotations:
-        "consul.hashicorp.com/connect-inject": "true"
-        "consul.hashicorp.com/connect-service-upstreams": "api:9091"
+        sidecar.istio.io/inject: "true"
     spec:
       containers:
       - name: web

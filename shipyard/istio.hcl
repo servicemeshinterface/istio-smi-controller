@@ -3,7 +3,7 @@ module "smi-controller" {
 }
 
 module "monitoring" {
-  source = "./modules/monitoring"
+  source = "github.com/nicholasjackson/hashicorp-shipyard-modules/modules/monitoring"
 }
 
 module "istio" {
