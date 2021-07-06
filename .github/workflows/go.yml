@@ -15,23 +15,6 @@ jobs:
       with:
         go-version: 1.16
 
-    - name: Setup Kubebuilder
-      run: |
-        os=$(go env GOOS)
-        arch=$(go env GOARCH)
-
-        # download kubebuilder and extract it to tmp
-        curl -L https://github.com/kubernetes-sigs/kubebuilder/releases/download/v3.1.0/kubebuilder_linux_amd64 \
-             -o /tmp/kubebuilder
-
-        sudo mv /tmp/kubebuilder /usr/local/bin/kubebuilder
-   
-    - name: Check Kubebuilder can generate CRDs
-      run: make manifests
-    
-    - name: Check Kubebuilder can generate deep copy objects
-      run: make generate
-
     - name: Build
       run: go build -v ./...
 
