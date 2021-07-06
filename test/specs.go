@@ -5,7 +5,8 @@ import (
 	specsv1alpha2 "github.com/servicemeshinterface/smi-controller-sdk/apis/specs/v1alpha2"
 	specsv1alpha3 "github.com/servicemeshinterface/smi-controller-sdk/apis/specs/v1alpha3"
 	specsv1alpha4 "github.com/servicemeshinterface/smi-controller-sdk/apis/specs/v1alpha4"
-	"k8s.io/kubectl/pkg/scheme"
+
+	"k8s.io/client-go/kubernetes/scheme"
 )
 
 func setupSpecs() error {

@@ -29,7 +29,6 @@ Feature: access.smi-spec.io
           name: prometheus
           namespace: default
     ```
-    Then I expect "UpsertTrafficTarget" to be called 1 time
   
   Scenario: Apply alpha2 TrafficSplitter
     Given the server is running
@@ -56,7 +55,6 @@ Feature: access.smi-spec.io
           name: prometheus
           namespace: default
     ```
-    Then I expect "UpsertTrafficTarget" to be called 1 time
  # 
   Scenario: Apply alpha1 TrafficSplitter
     Given the server is running
@@ -82,6 +80,3 @@ Feature: access.smi-spec.io
         name: prometheus
         namespace: default
     ```
-    Then I expect "UpsertTrafficTarget" to be called 1 time
-
-  

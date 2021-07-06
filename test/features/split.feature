@@ -20,7 +20,6 @@ Feature: split.smi-spec.io
           - service: baz
             weight: 50m
     ```
-    Then I expect "UpsertTrafficSplit" to be called 1 time
   
   @split
   Scenario: Apply alpha2 TrafficSplit
@@ -39,7 +38,7 @@ Feature: split.smi-spec.io
           - service: baz
             weight: 50
     ```
-    Then I expect "UpsertTrafficSplit" to be called 1 time
+    Then I exect a "VirtualService" named "trafficsplit-sample" to have been created
   
   @split @alpha3
   Scenario: Apply alpha3 TrafficSplit
@@ -78,8 +77,6 @@ Feature: split.smi-spec.io
           pathRegex: "/ping"
           methods: ["*"]
     ```
-    Then I expect "UpsertTrafficSplit" to be called 1 time
-    Then I expect "UpsertHTTPRouteGroup" to be called 1 time
   
   @split @alpha4
   Scenario: Apply alpha4 TrafficSplit
@@ -120,5 +117,3 @@ Feature: split.smi-spec.io
           pathRegex: "/ping"
           methods: ["*"]
     ```
-    Then I expect "UpsertTrafficSplit" to be called 1 time
-    Then I expect "UpsertHTTPRouteGroup" to be called 1 time

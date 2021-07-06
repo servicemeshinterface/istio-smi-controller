@@ -7,8 +7,10 @@ import (
 )
 
 func main() {
+	api := istio.New(&istio.IstioClient{})
+
 	// register our lifecycle callbacks with the controller
-	sdk.API().RegisterV1Alpha(&istio.API{})
+	sdk.API().RegisterV1Alpha(api)
 
 	// create and start a the controller
 	config := controller.DefaultConfig()

@@ -21,7 +21,6 @@ Feature: specs.smi-spec.io
         pathRegex: "/ping"
         methods: ["*"]
     ```
-    Then I expect "UpsertHTTPRouteGroup" to be called 1 time
   
   @specs @HTTPRouteGroup
   Scenario: Apply alpha2 HTTPRouteGroup
@@ -41,7 +40,6 @@ Feature: specs.smi-spec.io
         pathRegex: "/ping"
         methods: ["*"]
     ```
-    Then I expect "UpsertHTTPRouteGroup" to be called 1 time
     
   @specs @HTTPRouteGroup
   Scenario: Apply alpha3 HTTPRouteGroup
@@ -62,8 +60,7 @@ Feature: specs.smi-spec.io
           pathRegex: "/ping"
           methods: ["*"]
     ```
-    Then I expect "UpsertHTTPRouteGroup" to be called 1 time
-  
+
   @specs @HTTPRouteGroup
   Scenario: Apply alpha4 HTTPRouteGroup
     Given the server is running
@@ -85,8 +82,6 @@ Feature: specs.smi-spec.io
           pathRegex: "/ping"
           methods: ["*"]
     ```
-    Then I expect "UpsertHTTPRouteGroup" to be called 1 time
-
 
   @specs @TPCRoute
   Scenario: Apply alpha1 TCPRoute
@@ -98,7 +93,6 @@ Feature: specs.smi-spec.io
       metadata:
         name: tcp-route
     ```
-    Then I expect "UpsertTCPRoute" to be called 1 time
   
   @specs @TPCRoute
   Scenario: Apply alpha2 TCPRoute
@@ -110,7 +104,6 @@ Feature: specs.smi-spec.io
       metadata:
         name: tcp-route
     ```
-    Then I expect "UpsertTCPRoute" to be called 1 time
   
   @specs @TPCRoute
   Scenario: Apply alpha3 TCPRoute
@@ -123,7 +116,6 @@ Feature: specs.smi-spec.io
         name: tcp-route
       spec: {}
     ```
-    Then I expect "UpsertTCPRoute" to be called 1 time
   
   @specs @TPCRoute
   Scenario: Apply alpha4 TCPRoute
@@ -140,7 +132,6 @@ Feature: specs.smi-spec.io
           - 3306
           - 6446
     ```
-    Then I expect "UpsertTCPRoute" to be called 1 time
   
   
   @specs @UDPRoute
@@ -158,4 +149,3 @@ Feature: specs.smi-spec.io
           - 989
           - 990
     ```
-    Then I expect "UpsertUDPRoute" to be called 1 time
