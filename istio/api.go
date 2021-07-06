@@ -1,101 +1,126 @@
-package consul
+package istio
 
 import (
 	"context"
 
 	"github.com/go-logr/logr"
-	"github.com/hashicorp/consul/api"
-	"github.com/nicholasjackson/consul-smi-controller/consul/client"
-	splitv1alpha1 "github.com/servicemeshinterface/smi-sdk-go/pkg/apis/split/v1alpha1"
+	accessv1alpha3 "github.com/servicemeshinterface/smi-controller-sdk/apis/access/v1alpha3"
+	specsv1alpha4 "github.com/servicemeshinterface/smi-controller-sdk/apis/specs/v1alpha4"
+	splitv1alpha4 "github.com/servicemeshinterface/smi-controller-sdk/apis/split/v1alpha4"
 	ctrl "sigs.k8s.io/controller-runtime"
-	controllerclient "sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-// API defines a controller adaptor for Conul Service Mesh
-// it contains all the required callbacks invoked by the SMI controller
-// SDK.
-type API struct {
-	client client.Consul
-}
+type API struct{}
 
-// New creates a new API which implements the various
-// SDK interfaces called by the Controller
-func New(addr string) (*API, error) {
-	cc, err := client.New(addr)
-	if err != nil {
-		return nil, err
-	}
-
-	return &API{cc}, nil
-}
-
-// UpsertTrafficSplit implements the API interface method
-// for callbacks when a TrafficSplit resource is updated or
-// created in the Kubernetes cluster
-func (a *API) UpsertTrafficSplit(
+func (l *API) UpsertTrafficTarget(
 	ctx context.Context,
-	r controllerclient.Client,
-	l logr.Logger,
-	tt *splitv1alpha1.TrafficSplit) (ctrl.Result, error) {
+	c client.Client,
+	log logr.Logger,
+	tt *accessv1alpha3.TrafficTarget,
+) (ctrl.Result, error) {
 
-	l.Info("Upsert new Traffic Split")
-	l.Info("details",
-		"service", tt.Spec.Service,
-		"backends", tt.Spec.Backends,
-	)
-
-	ss := &api.ServiceSplitterConfigEntry{Kind: api.ServiceSplitter}
-	ss.Name = tt.Spec.Service
-	ss.Splits = []api.ServiceSplit{}
-
-	for _, b := range tt.Spec.Backends {
-		ss.Splits = append(
-			ss.Splits,
-			api.ServiceSplit{
-				Service:       ss.Name,
-				ServiceSubset: b.Service,
-				Weight:        float32(b.Weight.AsDec().UnscaledBig().Int64()),
-			})
-	}
-
-	err := a.client.WriteServiceSplitter(ss)
-
-	// if we can not process the request we should not keep retrying
-	// returning a default ctrl.Request{} and no error
-	// tells the controller we have accepted the config
-	// TODO: we need to determine recoverable errors from non
-	// recoverable
-	if err != nil {
-		l.Error(err, "Unable to write service splitter to Consul")
-	}
+	log.Info("UpsertTrafficTarget called", "api", "v1alpha3", "target", tt)
 
 	return ctrl.Result{}, nil
 }
 
-// DeleteTrafficSplit implements the API interface method
-// for callbacks when a TrafficSplit resource is deleted
-// in the Kubernetes cluster
-func (a *API) DeleteTrafficSplit(
+func (l *API) DeleteTrafficTarget(
 	ctx context.Context,
-	r controllerclient.Client,
-	l logr.Logger,
-	tt *splitv1alpha1.TrafficSplit) (ctrl.Result, error) {
+	c client.Client,
+	log logr.Logger,
+	tt *accessv1alpha3.TrafficTarget,
+) (ctrl.Result, error) {
 
-	l.Info("Delete new Traffic Split")
-	l.Info("details",
-		"service", tt.Spec.Service,
-		"backends", tt.Spec.Backends,
-	)
+	log.Info("DeleteTrafficTarget called", "api", "v1alpha3", "target", tt)
 
-	// if we can not process the request we should not keep retrying
-	// returning a default ctrl.Request{} and no error
-	// tells the controller we have accepted the config
-	// TODO: we need to determine recoverable errors from non
-	// recoverable
-	err := a.client.DeleteServiceSplitter(tt.Spec.Service)
-	if err != nil {
-		l.Error(err, "Unable to delete service splitter from Consul")
-	}
+	return ctrl.Result{}, nil
+}
+
+func (l *API) UpsertTrafficSplit(
+	ctx context.Context,
+	r client.Client,
+	log logr.Logger,
+	tt *splitv1alpha4.TrafficSplit) (ctrl.Result, error) {
+
+	log.Info("UpdateTrafficSplit called", "api", "v1alpha4", "target", tt)
+
+	return ctrl.Result{}, nil
+}
+
+func (l *API) DeleteTrafficSplit(
+	ctx context.Context,
+	r client.Client,
+	log logr.Logger,
+	tt *splitv1alpha4.TrafficSplit) (ctrl.Result, error) {
+
+	log.Info("DeleteTrafficSplit called", "api", "v1alpha4", "target", tt)
+
+	return ctrl.Result{}, nil
+}
+
+func (l *API) UpsertHTTPRouteGroup(
+	ctx context.Context,
+	r client.Client,
+	log logr.Logger,
+	tt *specsv1alpha4.HTTPRouteGroup) (ctrl.Result, error) {
+
+	log.Info("UpdateHTTPRouteGroup called", "api", "v1alpha4", "target", tt)
+
+	return ctrl.Result{}, nil
+}
+
+func (l *API) DeleteHTTPRouteGroup(
+	ctx context.Context,
+	r client.Client,
+	log logr.Logger,
+	tt *specsv1alpha4.HTTPRouteGroup) (ctrl.Result, error) {
+
+	log.Info("DeleteHTTPRouteGroup called", "api", "v1alpha4", "target", tt)
+
+	return ctrl.Result{}, nil
+}
+
+func (l *API) UpsertTCPRoute(
+	ctx context.Context,
+	r client.Client,
+	log logr.Logger,
+	tt *specsv1alpha4.TCPRoute) (ctrl.Result, error) {
+
+	log.Info("UpdateTCPRoute called", "api", "v1alpha4", "target", tt)
+
+	return ctrl.Result{}, nil
+}
+
+func (l *API) DeleteTCPRoute(
+	ctx context.Context,
+	r client.Client,
+	log logr.Logger,
+	tt *specsv1alpha4.TCPRoute) (ctrl.Result, error) {
+
+	log.Info("DeleteTCPRoute called", "api", "v1alpha4", "target", tt)
+
+	return ctrl.Result{}, nil
+}
+
+func (l *API) UpsertUDPRoute(
+	ctx context.Context,
+	r client.Client,
+	log logr.Logger,
+	tt *specsv1alpha4.UDPRoute) (ctrl.Result, error) {
+
+	log.Info("UpdateUDPRoute called", "api", "v1alpha4", "target", tt)
+
+	return ctrl.Result{}, nil
+}
+
+func (l *API) DeleteUDPRoute(
+	ctx context.Context,
+	r client.Client,
+	log logr.Logger,
+	tt *specsv1alpha4.UDPRoute) (ctrl.Result, error) {
+
+	log.Info("DeleteUDPRoute called", "api", "v1alpha4", "target", tt)
 
 	return ctrl.Result{}, nil
 }
