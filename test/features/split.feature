@@ -38,7 +38,6 @@ Feature: split.smi-spec.io
           - service: baz
             weight: 50
     ```
-    Then I exect a "VirtualService" named "trafficsplit-sample" to have been created
   
   @split @alpha3
   Scenario: Apply alpha3 TrafficSplit

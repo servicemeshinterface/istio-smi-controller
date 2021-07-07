@@ -1,4 +1,4 @@
-DOCKER_REPO=nicholasjackson/smi-controller-istio
+DOCKER_REPO=nicholasjackson/istio-smi-controller
 DOCKER_VERSION=0.1.0
 SHELL := /bin/bash
 
@@ -40,3 +40,6 @@ run_local: fetch_certs
 
 functional_test: fetch_certs
 	cd test && go run .
+
+unit_test: 
+	go test -v -race ./...
