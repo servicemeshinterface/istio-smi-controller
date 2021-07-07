@@ -1,0 +1,31 @@
+---
+apiVersion: split.smi-spec.io/v1alpha4
+kind: TrafficSplit
+metadata:
+  name: ab-test
+spec:
+  service: website
+  backends:
+  - service: website-v1
+    weight: 0
+  - service: website-v2
+    weight: 100
+
+## Creates
+#---
+#apiVersion: networking.istio.io/v1beta1
+#kind: VirtualService
+#...
+#spec:
+#  hosts:
+#  - reviews
+#  http:
+#  - route:
+#    - destination:
+#        host: website
+#        subset: website-v1
+#      weight: 0
+#    - destination:
+#        host: website
+#        subset: website-v2
+#      weight: 100

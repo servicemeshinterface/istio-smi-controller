@@ -10,6 +10,7 @@ require (
 	github.com/servicemeshinterface/smi-controller-sdk v0.0.0-20210706112634-f50376b590e8
 	github.com/shipyard-run/shipyard v0.3.12
 	github.com/stretchr/testify v1.7.0
+	istio.io/api v0.0.0-20210520012029-891c0c12abfd
 	istio.io/client-go v1.10.1
 	k8s.io/apimachinery v0.20.2
 	k8s.io/client-go v0.20.2

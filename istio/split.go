@@ -54,6 +54,8 @@ func (l *API) UpsertTrafficSplit(
 
 	err := l.client.CreateVirtualService(ctx, r, ts)
 	if err != nil {
+		log.Error(err, "Unable to create Istio VirtualService")
+
 		return ctrl.Result{Requeue: true}, err
 	}
 

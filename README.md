@@ -1,1 +1,1 @@
-# SMI Compliant Controller for Istio Service Mesh
+# SMI Compliant Controller for Istiot  Service Mesh

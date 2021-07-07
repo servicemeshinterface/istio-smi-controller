@@ -14,15 +14,14 @@ import (
 	"github.com/cucumber/messages-go/v10"
 	"github.com/go-logr/logr"
 	"github.com/hashicorp/go-hclog"
+	"github.com/nicholasjackson/istio-smi-controller/istio"
 	"github.com/servicemeshinterface/smi-controller-sdk/controllers/helpers"
 	"github.com/servicemeshinterface/smi-controller-sdk/sdk"
 	"github.com/servicemeshinterface/smi-controller-sdk/sdk/controller"
 	"github.com/shipyard-run/shipyard/pkg/clients"
-	"github.com/stretchr/testify/mock"
 
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
-	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	"k8s.io/client-go/kubernetes/scheme"
@@ -83,6 +82,11 @@ func setupClient() error {
 		return err
 	}
 
+	err = setupIstio()
+	if err != nil {
+		return err
+	}
+
 	k8sClient = clients.NewKubernetes(10*time.Millisecond, hclog.NewNullLogger())
 	k8sClient, err = k8sClient.SetConfig(os.Getenv("KUBECONFIG"))
 
@@ -105,16 +109,19 @@ func initializeSuite(ctx *godog.TestSuiteContext) {
 }
 
 func initializeScenario(ctx *godog.ScenarioContext) {
-	// setup the MockAPI
-	setupMockAPI()
-	sdk.API().RegisterV1Alpha(mockAPI)
+	// setup the IstioAPI
+	api := istio.New(&istio.IstioClient{})
+	sdk.API().RegisterV1Alpha(api)
 
 	ctx.Step(`^the server is running$`, theServerIsRunning)
 	ctx.Step(`^I create the following resource$`, iCreateTheFollowingResource)
 	ctx.Step(`^I expect "([^"]*)" to be called (\d+) time$`, iExpectToBeCalled)
 
+	ctx.Step(`^I expect (\d+) Istio "([^"]*)" named "([^"]*)" to have been created$`, iExpectIstioNamedToHaveBeenCreated)
+
 	ctx.AfterScenario(func(s *messages.Pickle, err error) {
 		cleanupResources()
+		cleanupIstio()
 
 		if err != nil {
 			fmt.Println("Error occurred running the tests", err)
@@ -265,59 +272,6 @@ func cleanupResources() {
 	if err != nil {
 		fmt.Println("Error removing v4 TrafficSplit", err)
 	}
-}
-
-func setupMockAPI() {
-	mockAPI = &helpers.MockAPI{}
-	mockAPI.On("UpsertTrafficTarget", mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything).Return(ctrl.Result{}, nil)
-
-	mockAPI.On("DeleteTrafficTarget", mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything).Return(ctrl.Result{}, nil)
-
-	mockAPI.On("UpsertTrafficSplit", mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything).Return(ctrl.Result{}, nil)
-
-	mockAPI.On("DeleteTrafficSplit", mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything).Return(ctrl.Result{}, nil)
-
-	mockAPI.On("UpsertHTTPRouteGroup", mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything).Return(ctrl.Result{}, nil)
-
-	mockAPI.On("DeleteHTTPRouteGroup", mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything).Return(ctrl.Result{}, nil)
-
-	mockAPI.On("UpsertTCPRoute", mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything).Return(ctrl.Result{}, nil)
-
-	mockAPI.On("DeleteTCPRoute", mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything).Return(ctrl.Result{}, nil)
-
-	mockAPI.On("UpsertUDPRoute", mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything).Return(ctrl.Result{}, nil)
-
-	mockAPI.On("DeleteUDPRoute", mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything).Return(ctrl.Result{}, nil)
 }
 
 func theServerIsRunning() error {

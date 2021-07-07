@@ -78,7 +78,7 @@ Feature: split.smi-spec.io
           methods: ["*"]
     ```
   
-  @split @alpha4
+  @split/alpha4
   Scenario: Apply alpha4 TrafficSplit
     Given the server is running
     When I create the following resource
@@ -117,3 +117,4 @@ Feature: split.smi-spec.io
           pathRegex: "/ping"
           methods: ["*"]
     ```
+    Then I expect 1 Istio "VirtualService" named "ab-test" to have been created
