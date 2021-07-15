@@ -21,3 +21,16 @@ func TestCreateVirtualService(t *testing.T) {
 
 	mc.AssertCalled(t, "CreateVirtualService", ctx, mcc, ts)
 }
+
+func TestDeleteVirtualService(t *testing.T) {
+	api, mc, mcc := setupTests(t)
+	mc.On("DeleteVirtualService", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+
+	ctx := context.Background()
+	ts := &splitv1alpha4.TrafficSplit{}
+	lgr := &logr.DiscardLogger{}
+
+	api.DeleteTrafficSplit(ctx, mcc, lgr, ts)
+
+	mc.AssertCalled(t, "DeleteVirtualService", ctx, mcc, ts)
+}

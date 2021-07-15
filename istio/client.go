@@ -14,6 +14,7 @@ import (
 // Client allows the creation of Istio objects from their SMI counterparts
 type Client interface {
 	CreateVirtualService(ctx context.Context, r client.Writer, ts *splitv1alpha4.TrafficSplit) error
+	DeleteVirtualService(ctx context.Context, r client.Writer, ts *splitv1alpha4.TrafficSplit) error
 }
 
 // IstioClient is a concrete implementation of Client
@@ -67,4 +68,16 @@ func (ic *IstioClient) CreateVirtualService(ctx context.Context, r client.Writer
 	vs.Spec.Http = []*networkingv1beta1.HTTPRoute{httpRoute}
 
 	return r.Create(ctx, vs, &client.CreateOptions{})
+}
+
+func (ic *IstioClient) DeleteVirtualService(ctx context.Context, r client.Writer, ts *splitv1alpha4.TrafficSplit) error {
+	ic.lazyRegisterIstioTypesToScheme(r.(client.Client))
+
+	vs := &v1beta1.VirtualService{}
+
+	// the client only need the name and namespace to delete the resource
+	vs.ObjectMeta.Name = ts.ObjectMeta.Name
+	vs.ObjectMeta.Namespace = ts.ObjectMeta.Namespace
+
+	return r.Delete(ctx, vs, &client.DeleteOptions{})
 }

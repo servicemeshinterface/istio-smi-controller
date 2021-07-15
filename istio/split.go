@@ -70,5 +70,12 @@ func (l *API) DeleteTrafficSplit(
 
 	log.Info("DeleteTrafficSplit called", "api", "v1alpha4", "target", ts)
 
+	err := l.client.DeleteVirtualService(ctx, r, ts)
+	if err != nil {
+		log.Error(err, "Unable to delete Istio VirtualService")
+
+		return ctrl.Result{Requeue: true}, err
+	}
+
 	return ctrl.Result{}, nil
 }
