@@ -1,6 +1,7 @@
 DOCKER_REPO=nicholasjackson/istio-smi-controller
 DOCKER_VERSION=0.1.0
 SHELL := /bin/bash
+TMPDIR ?= /tmp
 
 build_docker_setup:
 	docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
@@ -25,15 +26,15 @@ build_docker_push: build_docker_setup
 	docker buildx rm multi || true
 
 fetch_certs:
-	mkdir -p /tmp/k8s-webhook-server/serving-certs/
+	mkdir -p ${TMPDIR}/k8s-webhook-server/serving-certs/
 	
 	kubectl get secret smi-controller-webhook-certificate -n shipyard -o json | \
 		jq -r '.data."tls.crt"' | \
-		base64 -d > /tmp/k8s-webhook-server/serving-certs/tls.crt
+		base64 -d > ${TMPDIR}/k8s-webhook-server/serving-certs/tls.crt
 	
 	kubectl get secret smi-controller-webhook-certificate -n shipyard -o json | \
 		jq -r '.data."tls.key"' | \
-		base64 -d > /tmp/k8s-webhook-server/serving-certs/tls.key
+		base64 -d > ${TMPDIR}/k8s-webhook-server/serving-certs/tls.key
 
 run_local: fetch_certs
 	go run .
