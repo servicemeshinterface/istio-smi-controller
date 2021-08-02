@@ -117,3 +117,37 @@ Feature: split.smi-spec.io
           methods: ["*"]
     ```
     Then I expect 1 Istio "VirtualService" named "ab-test" to have been created
+
+  @split
+  Scenario: Delete alpha1 TrafficSplit
+    Given the server is running
+    And the following resource exists
+    ```
+      apiVersion: split.smi-spec.io/v1alpha1
+      kind: TrafficSplit
+      metadata:
+        name: trafficsplit-sample
+      spec:
+        service: foo
+        backends:
+          - service: bar
+            weight: 50m
+          - service: baz
+            weight: 50m
+    ```
+    And I verify that 1 Istio "VirtualService" named "trafficsplit-sample" exists
+    When I delete the following resource
+    ```
+      apiVersion: split.smi-spec.io/v1alpha1
+      kind: TrafficSplit
+      metadata:
+        name: trafficsplit-sample
+      spec:
+        service: foo
+        backends:
+          - service: bar
+            weight: 50m
+          - service: baz
+            weight: 50m
+    ```
+    Then I expect no Istio "VirtualService" named "trafficsplit-sample" to exist

@@ -115,9 +115,13 @@ func initializeScenario(ctx *godog.ScenarioContext) {
 
 	ctx.Step(`^the server is running$`, theServerIsRunning)
 	ctx.Step(`^I create the following resource$`, iCreateTheFollowingResource)
+	ctx.Step(`^I delete the following resource$`, iDeleteTheFollowingResource)
 	ctx.Step(`^I expect "([^"]*)" to be called (\d+) time$`, iExpectToBeCalled)
+	ctx.Step(`^the following resource exists$`, iCreateTheFollowingResource)
 
 	ctx.Step(`^I expect (\d+) Istio "([^"]*)" named "([^"]*)" to have been created$`, iExpectIstioNamedToHaveBeenCreated)
+	ctx.Step(`^I verify that (\d+) Istio "([^"]*)" named "([^"]*)" exists`, iExpectIstioNamedToHaveBeenCreated)
+	ctx.Step(`^I expect no Istio "([^"]*)" named "([^"]*)" to exist`, iExpectNoIstioNamedToExist)
 
 	ctx.AfterScenario(func(s *messages.Pickle, err error) {
 		cleanupResources()
@@ -308,6 +312,27 @@ func iCreateTheFollowingResource(arg1 *messages.PickleStepArgument_PickleDocStri
 
 	// import the file to the kubernetes cluster
 	err = k8sClient.Apply([]string{f.Name()}, true)
+	return err
+}
+
+func iDeleteTheFollowingResource(arg1 *messages.PickleStepArgument_PickleDocString) error {
+	// save the document to a temporary file
+	f, err := ioutil.TempFile("", "*.yaml")
+	if err != nil {
+		return err
+	}
+
+	// cleanup
+	defer os.Remove(f.Name())
+
+	// write the document to the file
+	_, err = f.WriteString(arg1.GetContent())
+	if err != nil {
+		return err
+	}
+
+	// delete the file from the kubernetes cluster
+	err = k8sClient.Delete([]string{f.Name()})
 	return err
 }
 
