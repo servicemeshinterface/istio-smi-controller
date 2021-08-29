@@ -7,5 +7,6 @@ variable "istio_k8s_network" {
 }
 
 module "istio" {
+  #source = "/Users/keith/Projects/blueprints/modules//kubernetes-istio"
   source = "github.com/shipyard-run/blueprints/modules//kubernetes-istio"
 }

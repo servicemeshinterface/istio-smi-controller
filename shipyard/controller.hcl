@@ -40,6 +40,7 @@ variable "install_example_app" {
 
 module "smi-controller" {
   #source = "/home/nicj/go/src/github.com/shipyard-run/blueprints/modules/kubernetes-smi-controller"
+  #source = "/Users/keith/Projects/blueprints/modules/kubernetes-smi-controller"
   source = "github.com/shipyard-run/blueprints/modules/kubernetes-smi-controller"
 }
 

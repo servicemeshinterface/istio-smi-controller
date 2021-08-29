@@ -41,3 +41,17 @@ func TestCreateVirtualServiceCallsCreateWithValidObject(t *testing.T) {
 		require.Equal(t, be.Service, vs.Spec.Http[0].Route[i].Destination.Subset)
 	}
 }
+
+func TestDeleteVirtualServiceCallsCreateWithValidObject(t *testing.T) {
+	is, mcc := setupClientTests(t)
+	mcc.On("Delete", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	ts := &splitv1alpha4.TrafficSplit{}
+
+	is.DeleteVirtualService(context.Background(), mcc, ts)
+
+	vs := getCalls(&mcc.Mock, "Delete")[0].Arguments[1].(*v1beta1.VirtualService)
+
+	require.Equal(t, vs.ObjectMeta.Name, ts.ObjectMeta.Name)
+	require.Equal(t, vs.ObjectMeta.Namespace, ts.ObjectMeta.Namespace)
+
+}

@@ -19,6 +19,11 @@ func (mc *MockClient) CreateVirtualService(ctx context.Context, r client.Writer,
 	return args.Error(0)
 }
 
+func (mc *MockClient) DeleteVirtualService(ctx context.Context, r client.Writer, ts *splitv1alpha4.TrafficSplit) error {
+	args := mc.Called(ctx, r, ts)
+	return args.Error(0)
+}
+
 // MockWriter is a mock implementation of the contoller Writer interface
 type MockControllerClient struct {
 	mock.Mock
