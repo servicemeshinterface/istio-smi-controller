@@ -926,6 +926,8 @@ github.com/servicemeshinterface/smi-controller-sdk v0.0.0-20210706112634-f50376b
 github.com/servicemeshinterface/smi-controller-sdk v0.0.0-20210706112634-f50376b590e8/go.mod h1:NmIY6dHl+9HtgXZ17Cjm7WuiaGl9acj9qJ5egbbpR+E=
 github.com/servicemeshinterface/smi-controller-sdk v0.0.0-20210818172318-d0d439200e4f h1:8l5r7L6J5b8k2K0Uigd3V+KVGWOEar8CNttKfaYV8Zw=
 github.com/servicemeshinterface/smi-controller-sdk v0.0.0-20210818172318-d0d439200e4f/go.mod h1:NmIY6dHl+9HtgXZ17Cjm7WuiaGl9acj9qJ5egbbpR+E=
+github.com/servicemeshinterface/smi-controller-sdk v0.0.0-20211026141844-6a60572bc542 h1:wk+Zk9fSesox5FsQuyW+ZwwiRazjUiI7InOUq5FSoVM=
+github.com/servicemeshinterface/smi-controller-sdk v0.0.0-20211026141844-6a60572bc542/go.mod h1:NmIY6dHl+9HtgXZ17Cjm7WuiaGl9acj9qJ5egbbpR+E=
 github.com/shipyard-run/connector v0.0.18 h1:KXCVcTojUfJ0QP5mHG4VWt2txTgwkNgkISSVMjNczLU=
 github.com/shipyard-run/connector v0.0.18/go.mod h1:hEKWnx/tRxSVoGPUeoSUSPwpos+8ceTQF5/gdIOST/I=
 github.com/shipyard-run/gohup v0.2.2 h1:yIJhQ7BItGd2cZmWeuxCneTNriIxLGaPtMt1FsW191A=

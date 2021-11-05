@@ -40,3 +40,49 @@ jobs:
       run: |
         eval $(shipyard env)
         make functional_test
+  
+  smi-conformance:
+    name: SMI Conformance tests on main
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+
+      - name: Deploy k8s-minikube
+        uses: manusa/actions-setup-minikube@v2.4.1
+        with:
+          minikube version: 'v1.21.0'
+          kubernetes version: 'v1.20.7'
+          driver: docker
+          start args: '--embed-certs'
+
+      - name: Install istio
+        run: |
+          curl -sL https://istio.io/downloadIstioctl | sh -
+          export PATH=$PATH:$HOME/.istioctl/bin
+          istioctl install -y --set profile=minimal
+
+      - name: Install istio-smi-controller
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+          kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5.4/cert-manager.yaml
+          sleep 30
+          helm upgrade --install --create-namespace istio-smi-controller https://servicemeshinterface.github.io/smi-controller-sdk/smi-controller-0.1.0.tgz --namespace istio-smi-controller --set-string controller.image.repository=keithmattix/istio-smi-controller
+  
+      - name: Interact with the cluster
+        run: |
+          kubectl describe node
+      
+      - name: SMI Conformance Tests
+        uses: keithmattix/meshery-smi-conformance-action@v0.9.3-rc8
+        with:
+          provider_token: ${{ secrets.MESHERY_PROVIDER_TOKEN }}
+          service_mesh: istio
+          mesh_deployed: true
+        env:
+          MESHERY_VERSION: v0.5.65

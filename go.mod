@@ -7,7 +7,7 @@ require (
 	github.com/cucumber/messages-go/v10 v10.0.3
 	github.com/go-logr/logr v0.4.0
 	github.com/hashicorp/go-hclog v0.16.1
-	github.com/servicemeshinterface/smi-controller-sdk v0.0.0-20210818172318-d0d439200e4f
+	github.com/servicemeshinterface/smi-controller-sdk v0.0.0-20211026141844-6a60572bc542
 	github.com/shipyard-run/shipyard v0.3.12
 	github.com/stretchr/testify v1.7.0
 	istio.io/api v0.0.0-20210520012029-891c0c12abfd
